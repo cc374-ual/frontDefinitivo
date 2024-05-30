@@ -1,0 +1,405 @@
+
+
+.container {
+  display: grid;
+  grid-template-columns: auto; 
+  grid-auto-rows: min-content;
+  grid-row-gap: 10px;
+}
+
+button {
+  text-align: center;
+}
+
+
+nav {
+  background-color: #084390;
+  padding: 20px 0;
+  align-items: center;
+  display:flex;
+  font-weight: bold;
+}
+
+.logo {
+  margin-right: auto; 
+  color:#fff;
+  margin-left: 20px;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-right: 20px;
+  transition: background-color 0.3s ease;
+}
+
+a:hover {
+  background-color: #037afa;
+}
+
+label {
+  width: 150px;
+  margin-right: 10px;
+  font-weight: bold;
+  height: 40px; 
+  display: flex;
+  align-items: center; 
+}
+.config{
+  text-align: center;
+  margin-bottom: 30px;
+}
+.input-personalizado {
+  flex:1;
+  margin-left: 5px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.config-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding: 10px; 
+  text-align: center;
+  background-color: #0057b4;
+  border-radius: 5px; 
+  color: #ffffff; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.divider {
+  border-top: 1px solid #000000; 
+  margin: 10px 0; 
+  width: 100%; 
+  box-sizing: border-box; 
+}
+.hola {
+  text-align: center;
+}
+
+.input-personalizado:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.states {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#tabla-estados {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+
+#tabla-suricata {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#tabla-suricata th, #tabla-suricata td {
+  padding: 10px;
+  font-size: 20px;
+  text-align: center;
+  border-bottom: 1px;
+}
+
+#tabla-suricata tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.accion-btnActivo {
+  padding: 5px 10px;
+  background-color: #8d0606; 
+  color: #fdfdfd; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.accion-btnInactivo {
+  padding: 5px 10px;
+  background-color: #068d41; 
+  color: #fdfdfd; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#tabla-estados th, #tabla-estados td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+#tabla-estados th {
+  background-color: #f2f2f2;
+}
+#tabla-estados tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display:flex;
+  align-items: center;
+  
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+button#guardarCambios {
+  display: block; 
+  margin:0 auto;
+  text-align: center;
+  padding: 12px 24px; 
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 5px; 
+  background-color: #0057b4; 
+  color: #fff; 
+  border: none; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+button#guardarCambios:hover {
+  background-color: #001c39; 
+}
+
+button#guardarCambiosRegla {
+  display: block; 
+  margin:0 auto;
+  text-align: center;
+  padding: 12px 24px; 
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 5px; 
+  background-color: #0057b4;
+  color: #fff; 
+  border: none; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+button#guardarCambiosRegla:hover {
+  background-color: #001c39; 
+}
+
+button#guardarCambiosConfigGeneral {
+  display: block; 
+  margin:0 auto;
+  text-align: center;
+  padding: 12px 24px; 
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 5px; 
+  background-color: #0057b4; 
+  color: #fff; 
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+button#guardarCambiosConfigGeneral:hover {
+  background-color: #001c39; 
+}
+.ayuda-formato {
+  font-size: 0.8em;
+  color: #888;
+  display:block;
+  margin-right: 50px;
+}
+#contenedor-tabla {
+  max-width: 1500px; 
+  margin: 0 auto; 
+  padding: 0;
+}
+
+#tabla-alertas {
+  margin-top: 100px;
+  max-width: 100%;
+  margin:10px auto;
+  border-collapse: collapse;
+}
+
+#tabla-alertas th,
+#tabla-alertas td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#tabla-alertas th {
+  background-color: #0057b4;
+  font-weight: bold;
+  color:#ffffff
+}
+
+#tabla-alertas tr:hover {
+  background-color: #ddd;
+}
+
+#paginacion {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#paginacion button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  background-color: #0057b4;
+  color: white;
+  cursor: pointer;
+}
+
+#paginacion button:disabled {
+  background-color: #ccc;
+  cursor: default;
+}
+#contenedor-filtros {
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+#filtro, #searchInput, #fechaInicio, #fechaFin {
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  text-align: center;
+  cursor:pointer;
+}
+
+#filtro {
+  background-color: #0057b4;
+  color:white;
+  font-weight: bold;
+}
+
+#filtro:hover {
+  background-color: #037afa;
+}
+
+#buscarBtn {
+  padding: 10px 20px;
+  margin-top: 5px; 
+  margin-right: 10px; 
+  border: none;
+  border-radius: 5px;
+  background-color: #0057b4;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+}
+
+#buscarBtn:hover{
+  background-color: #037afa;
+}
+
+
+.panel {
+  max-width: 800px; 
+  margin: 50px auto; 
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: grid;
+  text-align: center;
+}
+
+#panel-informativo{
+  background-color: #ffffff;
+}
+
+#numero-alertas {
+  font-size: 20px;
+  text-align: left;
+  font-weight: bold;
+  color: #000000; 
+}
+
+#maximo-numero-alertas-ip-destino {
+  font-size: 20px;
+  text-align: left;
+  font-weight: bold;
+  color: #000000; 
+}
+
+#maximo-numero-alertas-protocolo {
+  font-size: 20px;
+  text-align: left;
+  font-weight: bold;
+  color: #000000; 
+}
+
+#maximo-numero-alertas-puerto {
+  font-size: 20px;
+  text-align: left;
+  font-weight: bold;
+  color: #000000; 
+}
+
+
+#panel-1-title {
+  background-color: #0057b4;
+  color: #ffffff;
+  padding: 10px 20px; 
+  border-radius: 15px;
+}
+
+#graphs{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#tabla-alertas-protocolo {
+  margin-top: 100px;
+  max-width: 100%;
+  margin:10px auto;
+  border-collapse: collapse;
+}
+
+#tabla-alertas-protocolo th,
+#tabla-alertas-protocolo td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#tabla-alertas-protocolo th {
+  background-color: #0057b4;
+  font-weight: bold;
+  color:#ffffff
+}
+
+#tabla-alertas-protocolo tr:hover {
+  background-color: #ddd;
+}

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>File Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <nav>
+        <div class="logo">
+            <span>Suricata Web Config</span>
+        </div>
+        <a href="index.html">Inicio</a>
+        <a href="alertas.html">Alertas</a>
+        <a href="configuracion.html">Configuración</a>
+        <a href="estado.html">Estado</a>
+    </nav>
+    <div id="panel-informativo" class="panel">
+        <h2 class="prueba2" id="panel-1-title">Panel Informativo de Alertas</h2>
+        <hr class="divider">
+        <div id="numero-alertas">Número de alertas: </div>
+        <div id="maximo-numero-alertas-ip-destino">IP destino con más alertas: </div>
+        <div id="maximo-numero-alertas-protocolo">Protocolo con más alertas: </div>
+        <div id="maximo-numero-alertas-puerto">Puerto con más alertas: </div>
+    </div>
+    <div id="graphs">
+        <div class="panel">
+            <canvas id="histograma-protocolo" width="800" height="300"></canvas>
+            <table id="tabla-alertas-protocolo">
+                
+                <thead>
+                    <tr>
+                        <th>Protocolo</th>
+                        <th>Total alertas</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-alerts-protocolo">
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="panel">
+            <canvas id="histograma-ip-fuente" width="800" height="300"></canvas>
+            <table id="tabla-alertas-protocolo">
+                
+                <thead>
+                    <tr>
+                        <th>Dirección IP</th>
+                        <th>Total alertas</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-alerts-ip-source">
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="panel">
+            <canvas id="histograma-ip-destino" width="800" height="300"></canvas>
+            <table id="tabla-alertas-protocolo">
+                
+                <thead>
+                    <tr>
+                        <th>Dirección IP</th>
+                        <th>Total alertas</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-alerts-ip-dest">
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="panel">
+            <canvas id="histograma-puerto-destino" width="800" height="300"></canvas>
+            <table id="tabla-alertas-protocolo">
+                
+                <thead>
+                    <tr>
+                        <th>Dirección IP</th>
+                        <th>Total alertas</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-alerts-dst-port">
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <script>
+        $.get('http://192.168.227.128:3000/numeroAlertas', function (response) {
+            console.log(response[0].contador);
+            $('#numero-alertas').append(response[0].contador);
+        });
+        $.get('http://192.168.227.128:3000/ipDestinoMasAlertas', function (response) {
+            console.log(response[0].dst_ip);
+            $('#maximo-numero-alertas-ip-destino').append(response[0].dst_ip);
+        });
+        $.get('http://192.168.227.128:3000/protocoloMasAlertas', function (response) {
+            console.log(response[0].dst_ip);
+            $('#maximo-numero-alertas-protocolo').append(response[0].proto);
+        });
+        $.get('http://192.168.227.128:3000/puertoDestinoMasAlertas', function (response) {
+            console.log(response[0].dst_port);
+            $('#maximo-numero-alertas-puerto').append(response[0].dst_port);
+        });
+        fetch('http://192.168.227.128:3000/alertasProtocolo')
+            .then(response => response.json())
+            .then(data => {
+    
+                const labels = data.map(item => item.proto);
+                const valores = data.map(item => item.total);
+
+                data.forEach(function (alerta) {
+      
+                    $('#tbody-alerts-protocolo').append(`
+                    <tr>
+                        <td>${alerta.proto}</td>
+                        <td>${alerta.total}</td>
+                    </tr>    
+                    `);
+                 });
+
+                console.log(labels);
+                console.log(valores);
+     
+                var ctx = document.getElementById('histograma-protocolo').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Cantidad de Alertas por Protocolo',
+                            data: valores,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                type: 'linear', 
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Cantidad de Alertas' 
+                                }
+                            }]
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+
+        fetch('http://192.168.227.128:3000/alertasIpFuente')
+            .then(response => response.json())
+            .then(data => {
+  
+                const labels = data.map(item => item.src_ip);
+                const valores = data.map(item => item.total);
+
+                data.forEach(function (alerta) {
+     
+                    $('#tbody-alerts-ip-source').append(`
+                    <tr>
+                        <td>${alerta.src_ip}</td>
+                        <td>${alerta.total}</td>
+                    </tr>    
+                    `);
+                 });
+
+                console.log(labels);
+                console.log(valores);
+            
+                var ctx = document.getElementById('histograma-ip-fuente').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Cantidad de Alertas por Dirección IP Fuente',
+                            data: valores,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                type: 'linear', 
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Cantidad de Alertas' 
+                                }
+                            }]
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+
+        fetch('http://192.168.227.128:3000/alertasIpDestino')
+            .then(response => response.json())
+            .then(data => {
+          
+                const labels = data.map(item => item.dst_ip);
+                const valores = data.map(item => item.total);
+
+                data.forEach(function (alerta) {
+                
+                    $('#tbody-alerts-ip-dest').append(`
+                    <tr>
+                        <td>${alerta.dst_ip}</td>
+                        <td>${alerta.total}</td>
+                    </tr>    
+                    `);
+                 });
+
+                console.log(labels);
+                console.log(valores);
+       
+                var ctx = document.getElementById('histograma-ip-destino').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Cantidad de Alertas por Dirección IP Destino',
+                            data: valores,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                type: 'linear', 
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Cantidad de Alertas' 
+                                }
+                            }]
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+
+        fetch('http://192.168.227.128:3000/alertasPuertoDestino')
+            .then(response => response.json())
+            .then(data => {
+                
+                const labels = data.map(item => item.dst_port);
+                const valores = data.map(item => item.total);
+
+                console.log(labels);
+                console.log(valores);
+
+                data.forEach(function (alerta) {
+            
+                    $('#tbody-alerts-dst-port').append(`
+                    <tr>
+                        <td>${alerta.dst_port}</td>
+                        <td>${alerta.total}</td>
+                    </tr>    
+                    `);
+                 });
+
+                
+                var ctx = document.getElementById('histograma-puerto-destino').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Cantidad de Alertas por Puerto Destino',
+                            data: valores,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Cantidad de Alertas por Puerto Destino', 
+                            fontSize: 50, 
+                            fontFamily: 'Arial', 
+                            fontStyle: 'bold' 
+                        },
+                        scales: {
+                            yAxes: [{
+                                type: 'linear', 
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Cantidad de Alertas' 
+                                }
+                            }]
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+
+
+          
+    $('#tbody-alerts-protocolo').on('click', 'tr', function() {
+    const protocoloSeleccionado = $(this).find('td:first').text(); 
+    window.location.href = `alertas.html?protocolo=${protocoloSeleccionado}`;
+
+    });
+
+    $('#tbody-alerts-ip-source').on('click', 'tr', function() {
+   const ipFuenteSeleccionada = $(this).find('td:first').text();
+    window.location.href = `alertas.html?ipFuente=${ipFuenteSeleccionada}`;
+    });
+
+
+    $('#tbody-alerts-ip-dest').on('click', 'tr', function() {
+   const ipDestinoSeleccionada = $(this).find('td:first').text(); 
+    window.location.href = `alertas.html?ipDestino=${ipDestinoSeleccionada}`;
+    });
+
+
+    $('#tbody-alerts-dst-port').on('click', 'tr', function() {
+   const destPortSeleccionada = $(this).find('td:first').text();
+    window.location.href = `alertas.html?destPort=${destPortSeleccionada}`;
+    });
+    
+
+    </script>
+
+</body>
+
+</html>

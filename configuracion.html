@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>File Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <span>Suricata Web Config</span>
+        </div>
+        <a href="index.html">Inicio</a>
+        <a href="alertas.html">Alertas</a>
+        <a href="configuracion.html">Configuración</a>
+        <a href="estado.html">Estado</a>
+    </nav>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <div class="container">
+        <div class="config-title">Estado Suricata</div>
+        <hr class="divider">
+        <div class="form-group">
+            <table class="table" id="tabla-suricata">
+                <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-states">
+                 
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="config-title">Configuración general</div>
+        <hr class="divider">
+        <div class="form-group">
+            <label for="regla-suricata">Interfaz: </label>
+            <input type="text" class="input-personalizado" id="response-IFace" name="response-IFace" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="regla-suricata">$HOME_NET: </label>
+            <input type="text" class="input-personalizado" id="response-homenet" name="response-homenet" class="form-control">
+        </div>
+    
+        <button id="guardarCambiosConfigGeneral">Guardar cambios</button>
+    </div>
+
+
+    <div class="container">
+        <div class="config-title">Configuración variables WAN</div>
+        <hr class="divider">
+        <div class="form-group">
+            <label for="response-HTTPSERVER">HTTP_SERVERS:</label>
+            <input type="text" class="input-personalizado" id="response-HTTPSERVER" name="response-HTTPSERVER" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="response-SQLSERVER">SQL_SERVERS:</label>
+            <input type="text" class="input-personalizado" id="response-SQLSERVER" name="response-SQLSERVER" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="response-DNSSERVER">DNS_SERVERS:</label>
+            <input type="text" class="input-personalizado" id="response-DNSSERVER" name="response-DNSSERVER" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="response-AIMSERVER">AIM_SERVERS:</label>
+            <input type="text" class="input-personalizado" id="response-AIMSERVER" name="response-AIMSERVER" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="response-DNP3SERVER">DNP3_SERVERS:</label>
+            <input type="text" class="input-personalizado" id="response-DNP3SERVER" name="response-DNP3SERVER" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="response-DNP3CLIENT">DNP3_CLIENT:</label>
+            <input type="text" class="input-personalizado" id="response-DNP3CLIENT" name="response-DNP3CLIENT" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="response-ENPCLIENT">ENIP_CLIENT:</label>
+            <input type="text" class="input-personalizado" id="response-ENIPCLIENT" name="response-ENIPCLIENT" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="response-DNP3SERVER">ENIP_SERVER:</label>
+            <input type="text" class="input-personalizado" id="response-ENIPSERVER" name="response-ENIPSERVER" class="form-control">
+        </div>
+        <button id="guardarCambios">Guardar cambios</button>
+    </div>
+    <div class="container">
+        <div class="config-title">Añadir regla personalizada</div>
+        <hr class="divider">
+        <div class="form-group">
+            <label for="regla-suricata">Introduzca regla:</label>
+            <input type="text" class="input-personalizado" id="regla-suricata" class="form-control">
+            
+        </div>
+        <span class="ayuda-formato">Formato: alert [protocolo] [fuente] [puerto] -> [destino] [puerto] (msg:"[mensaje]"; sid:[SID];)</span>
+        <button id="guardarCambiosRegla">Guardar cambios</button>
+    </div>
+        <script src="script.js"></script>
+
+
+        <script>
+                 $(document).ready(function(){
+            $.get('http://192.168.227.128:3000/estado-contenedores', function(estados){
+                $.each(estados, function(nombre,estado){
+                    let indicadorClase = estado.estado.toLowerCase() === 'up' ? 'Activo' : 'Inactivo';
+                    let accionBoton = indicadorClase === 'Activo' ? 'Apagar' : 'Encender';
+                    let puertos = estado.puertos.join(', ');
+                    let filaId = 'fila-' + nombre;
+                    if (nombre !== 'suricata'){
+                       return true;
+			}
+                    $('#tbody-states').append(`
+                    <tr id="${filaId}">
+                        <td><div class="${indicadorClase}">${indicadorClase}</div></td>
+                        <td><button class= "accion-btn${indicadorClase}" onclick="actualizarEstado('${nombre}','${indicadorClase}')">${accionBoton}</button></td>
+                    </tr>`);
+                });
+                
+            });
+        });
+
+
+        function actualizarEstado(nombreContenedor,indicadorClase){
+        
+        var datos = {
+            nombre: nombreContenedor,
+            indicador: indicadorClase}
+
+        
+        fetch('http://192.168.227.128:3000/actualizar-estado', {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json'
+          },
+        body: JSON.stringify(datos)
+        }).then(function(response){
+            window.location.reload();
+        });
+    }
+
+        </script>
+</body>
+</html>

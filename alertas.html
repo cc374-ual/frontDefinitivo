@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>File Editor</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <span>Suricata Web Config</span>
+  </div>
+    <a href="index.html">Inicio</a>
+    <a href="alertas.html">Alertas</a>
+    <a href="configuracion.html">Configuración</a>
+    <a href="estado.html">Estado</a>
+  </nav>
+
+  <div id="contenedor-tabla">
+    <div id="contenedor-filtros">
+      <div id="filtros">
+        <select id="filtro">
+          <option value="alertDate">FechaAlerta</option>
+          <option value="src_ip">IP origen</option>
+          <option value="src_port">Puerto origen</option>
+          <option value="dst_ip">IP destino</option>
+          <option value="dst_port">Puerto destino</option>
+          <option value="proto">Protocolo</option>
+          <option value="signature_id">ID Alerta</option>
+          <option value="signature">Descripción</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Buscar Alerta">
+      </div>
+      <div id="contenedor-fecha">
+        <input type="text" id="fechaInicio" placeholder="Fecha de inicio">
+        <input type="text" id="fechaFin" placeholder="Fecha de fin">
+      </div>
+      <button id="buscarBtn">Buscar</button>
+    </div>
+    <table id="tabla-alertas">
+      <thead>
+        <tr>
+          <th>FechaAlerta</th>
+          <th>IP origen</th>
+          <th>Puerto origen</th>
+          <th>IP destino</th>
+          <th>Puerto destino</th>
+          <th>Protocolo</th>
+          <th>ID Alerta</th>
+          <th>Descripción</th>
+      
+        </tr>
+      </thead>
+      <tbody id="tbody-alerts">
+
+      </tbody>
+    </table>
+    <div id="paginacion">
+      <button id="anterior">Anterior</button>
+      <button id="siguiente">Siguiente</button>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    let filtroSeleccionado = "";
+    let data;
+    $(document).ready(function () {
+
+      $.get('http://192.168.227.128:3000/alertas', function (response) {
+        data = response;
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('protocolo')){
+            const filtro = urlParams.get('protocolo');
+      
+            const alertasFiltradas = data.filter(function(alerta) {
+                return alerta['proto'].toString().toLowerCase() === filtro.toString().toLowerCase();
+            });
+
+            $('#filtro').val('proto');
+            $('#searchInput').val(filtro);
+            $('#fechaInicio').hide();
+            $('#fechaFin').hide();
+
+            mostrarAlertas(alertasFiltradas);
+            actualizarBotones(alertasFiltradas);
+
+      }else if(urlParams.get('ipFuente')){
+            const filtro = urlParams.get('ipFuente');
+      
+            const alertasFiltradas = data.filter(function(alerta) {
+                return alerta['src_ip'].toString().toLowerCase() === filtro.toString().toLowerCase();
+            });
+
+            $('#filtro').val('src_ip');
+            $('#searchInput').val(filtro);
+            $('#fechaInicio').hide();
+            $('#fechaFin').hide();
+
+      
+            mostrarAlertas(alertasFiltradas);
+            actualizarBotones(alertasFiltradas);
+      }else if(urlParams.get('ipDestino')){
+        const filtro = urlParams.get('ipDestino');
+      
+            const alertasFiltradas = data.filter(function(alerta) {
+                return alerta['dst_ip'].toString().toLowerCase() === filtro.toString().toLowerCase();
+            });
+
+            $('#filtro').val('dst_ip');
+            $('#searchInput').val(filtro);
+            $('#fechaInicio').hide();
+            $('#fechaFin').hide();
+
+      
+            mostrarAlertas(alertasFiltradas);
+            actualizarBotones(alertasFiltradas);
+      }else if(urlParams.get('destPort')){
+        const filtro = urlParams.get('destPort');
+      
+      const alertasFiltradas = data.filter(function(alerta) {
+          return alerta['dst_port'].toString().toLowerCase() === filtro.toString().toLowerCase();
+      });
+
+      $('#filtro').val('dst_port');
+      $('#searchInput').val(filtro);
+      $('#fechaInicio').hide();
+      $('#fechaFin').hide();
+
+
+      mostrarAlertas(alertasFiltradas);
+      actualizarBotones(alertasFiltradas);
+      } else {
+        mostrarAlertas(data);
+        actualizarBotones(data);
+      }
+      });
+
+      let pagina = 1;
+      const totalPagina = 10;
+      console.log(filtroSeleccionado);
+
+      function mostrarAlertas(data) {
+   
+        console.log(filtroSeleccionado);
+        const inicio = (pagina - 1) * totalPagina;
+
+        const fin = pagina * totalPagina;
+        const alertasPagina = data.slice(inicio, fin);
+
+        $('#tbody-alerts').empty();
+        alertasPagina.forEach(function (alerta) {
+    
+          $('#tbody-alerts').append(`
+                  <tr>
+                    <td>${alerta.alertDate}</td>
+                    <td>${alerta.src_ip}</td>
+                    <td>${alerta.src_port}</td>
+                    <td>${alerta.dst_ip}</td>
+                    <td>${alerta.dst_port}</td>
+                    <td>${alerta.proto}</td>
+                    <td>${alerta.signature_id}</td>
+                    <td colspan='3'>${alerta.signature}</td>
+                  </tr>
+                `);
+        });
+      }
+      function actualizarBotones(data) {
+        const totalPages = Math.ceil(data.length / totalPagina);
+        $('#anterior').prop('disabled', pagina === 1);
+        $('#siguiente').prop('disabled', pagina === totalPages || totalPages === 0);
+      }
+
+      function filtrarAlertas(searchTerm, filtro) {
+
+        if (searchTerm == "" || filtro == "") {
+          mostrarAlertas(data);
+          actualizarBotones(data);
+        }
+        else {
+          const alertasFiltradas = data.filter(function (alerta) {
+            console.log(alerta);
+            console.log(searchTerm);
+            console.log(filtro);
+            
+              return alerta[filtro].toString().toLowerCase() === searchTerm.toString();
+            
+          });
+
+          console.log(alertasFiltradas.length);
+         
+          mostrarAlertas(alertasFiltradas);
+          actualizarBotones(alertasFiltradas);
+        }
+      }
+      $('#buscarBtn').click(function () {
+
+        if(filtroSeleccionado === "alertDate"){
+          const fechaInicio = $("#fechaInicio").datepicker("getDate");
+          const fechaFin = $("#fechaFin").datepicker("getDate");
+          filtrarAlertasPorFecha(fechaInicio, fechaFin);
+        }else{
+          const searchTerm = $('#searchInput').val().trim().toLowerCase();
+          filtrarAlertas(searchTerm, filtroSeleccionado);
+        }
+      });
+
+      $(document).ready(function () {
+    
+        $("#fechaInicio").datepicker();
+        $("#fechaFin").datepicker();
+      });
+
+      $('#anterior').click(function () {
+        console.log(pagina);
+        if (pagina > 1) {
+          pagina--;
+          filtrarAlertas($('#searchInput').val().trim().toLowerCase(), filtroSeleccionado);
+        }
+      });
+
+      $('#siguiente').click(function () {
+        console.log(pagina);
+        const totalPages = Math.ceil(data.length / totalPagina);
+        console.log(data);
+        console.log(totalPages);
+        if (pagina < totalPages) {
+          pagina++;
+          filtrarAlertas($('#searchInput').val().trim().toLowerCase(), filtroSeleccionado);
+        }
+        console.log("Que pasa");
+      });
+
+      $('#filtro').change(function () {
+        filtroSeleccionado = $(this).val(); 
+
+        if (filtroSeleccionado === "alertDate") {
+        $('#fechaInicio').show();
+        $('#fechaFin').show();
+        $('#searchInput').hide();
+        $('#buscarBtn').show();
+        $("#fechaInicio").datepicker();
+        $("#fechaFin").datepicker();
+    } else {
+        $('#fechaInicio').hide();
+        $('#fechaFin').hide();
+        $('#searchInput').show();
+        $('#buscarBtn').show();
+    }
+      });
+
+
+      function filtrarAlertasPorFecha(fechaInicio, fechaFin) {
+        console.log(fechaFin);
+        const alertasFiltradas2 = data.filter(function (alerta) {
+          const alertDate = new Date(alerta.alertDate);
+          return alertDate >= fechaInicio && alertDate <= fechaFin;
+        });
+
+        mostrarAlertas(alertasFiltradas2);
+        actualizarBotones(alertasFiltradas2);
+      }
+    });
+
+
+  </script>
+</body>
+
+</html>

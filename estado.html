@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>File Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <nav>
+        <div class="logo">
+            <span>Suricata Web Config</span>
+        </div>
+        <a href="index.html">Inicio</a>
+        <a href="alertas.html">Alertas</a>
+        <a href="configuracion.html">Configuración</a>
+        <a href="estado.html">Estado</a>
+    </nav>
+    <div class="states">
+    <table class="table" id="tabla-estados">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Puertos</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="tbody-states">
+           
+        </tbody>
+    </table>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $.get('http://192.168.227.128:3000/estado-contenedores', function(estados){
+                $.each(estados, function(nombre,estado){
+                    let indicadorClase = estado.estado.toLowerCase() === 'up' ? 'Activo' : 'Inactivo';
+                    let accionBoton = indicadorClase === 'Activo' ? 'Apagar' : 'Encender';
+                    let puertos = estado.puertos.join(', ');
+                    let filaId = 'fila-' + nombre;
+                    if(nombre === 'suricata'){
+			return true;
+			}
+                    $('#tbody-states').append(`
+                    <tr id="${filaId}">
+                        <td>${nombre}</td>
+                        <td><div class="${indicadorClase}">${indicadorClase}</div></td>
+                        <td>${puertos}</td>
+                        <td><button class= "accion-btn${indicadorClase}" onclick="actualizarEstado('${nombre}','${indicadorClase}')">${accionBoton}</button></td>
+                    </tr>`);
+                });
+                
+            });
+        });
+
+        function actualizarEstado(nombreContenedor,indicadorClase){
+        
+            var datos = {
+                nombre: nombreContenedor,
+                indicador: indicadorClase}
+
+            
+            fetch('http://192.168.227.128:3000/actualizar-estado', {
+             method: 'POST',
+             headers: {
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify(datos)
+            }).then(function(response){
+                window.location.reload();
+            });
+        }
+
+    </script>
+</body>
+</html>
