@@ -38,9 +38,9 @@
                 $.each(estados, function(nombre,estado){
                     let indicadorClase = estado.estado.toLowerCase() === 'up' ? 'Activo' : 'Inactivo';
                     let accionBoton = indicadorClase === 'Activo' ? 'Apagar' : 'Encender';
-                    let puertos = estado.puertos.join(', ');
+                    let puertos = estado.puertos.map(puerto => puerto.replace(/0\.0\.0\.0:|127\.0\.0\.1:|\/tcp|\/udp|\s*->.*/g, '').match(/\d+/)[0]).join(', ');
                     let filaId = 'fila-' + nombre;
-                    if(nombre === 'suricata'){
+                    if(nombre === 'suricata' || nombre === 'nginx' || nombre === 'spiderfoot' || nombre === 'ewsposter' || nombre === 'map_web' || nombre === 'tanner_phpox' || nombre === 'fatt' || nombre === 'tanner_redis' || nombre === 'p0f' || nombre === 'conpot_guardian_ast' || nombre === 'elasticsearch' || nombre === 'map_data' || nombre === 'logstash' || nombre === 'kibana' || nombre === 'tanner_api' || nombre === 'conpot_karmstrup_382' ){
 			return true;
 			}
                     $('#tbody-states').append(`
