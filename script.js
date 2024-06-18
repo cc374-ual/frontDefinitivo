@@ -1,4 +1,4 @@
-fetch('http://192.168.227.128:3000/')
+fetch('http://${serverIP}:3000/')
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -101,7 +101,7 @@ fetch('http://192.168.227.128:3000/')
       enipServer: responseENIPSERVER,
     }
 
-    fetch('http://192.168.227.128:3000/guardarCambios', {
+    fetch('http://${serverIP}/guardarCambios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -165,7 +165,7 @@ function guardarCambiosRegla(){
     textoRegla: texto
   }
 
-  fetch('http://192.168.227.128:3000/guardarCambiosRegla', {
+  fetch('http://${serverIP}/guardarCambiosRegla', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -200,7 +200,7 @@ function guardarCambiosConfigGeneral(){
     homeNet: homeNet
   }
 
-  fetch('http://192.168.227.128:3000/guardarCambiosConfigGeneral', {
+  fetch('http://${serverIP}/guardarCambiosConfigGeneral', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
