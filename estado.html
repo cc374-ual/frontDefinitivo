@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <script> const serverIP= '192.168.227.128:3000'; </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <nav>
         <div class="logo">
@@ -34,7 +35,7 @@
     </div>
     <script>
         $(document).ready(function(){
-            $.get('http://192.168.227.128:3000/estadoContenedores', function(estados){
+            $.get(`http://${serverIP}/estadoContenedores`, function(estados){
                 $.each(estados, function(nombre,estado){
                     let indicadorClase = estado.estado.toLowerCase() === 'up' ? 'Activo' : 'Inactivo';
                     let accionBoton = indicadorClase === 'Activo' ? 'Apagar' : 'Encender';
@@ -62,7 +63,7 @@
                 indicador: indicadorClase}
 
             
-            fetch('http://192.168.227.128:3000/actualizarEstado', {
+            fetch(`http://${serverIP}/actualizarEstado`, {
              method: 'POST',
              headers: {
                 'Content-Type': 'application/json'
