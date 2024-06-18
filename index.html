@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <script> const serverIP= '192.168.227.128:3000'; </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <nav>
         <div class="logo">
@@ -95,23 +96,23 @@
         </div>
     </div>
     <script>
-        $.get('http://192.168.227.128:3000/numeroAlertas', function (response) {
+        $.get(`http://${serverIP}/numeroAlertas`, function (response) {
             console.log(response[0].contador);
             $('#numero-alertas').append(response[0].contador);
         });
-        $.get('http://192.168.227.128:3000/ipDestinoMasAlertas', function (response) {
+        $.get(`http://${serverIP}/ipDestinoMasAlertas`, function (response) {
             console.log(response[0].dst_ip);
             $('#maximo-numero-alertas-ip-destino').append(response[0].dst_ip);
         });
-        $.get('http://192.168.227.128:3000/protocoloMasAlertas', function (response) {
+        $.get(`http://${serverIP}/protocoloMasAlertas`, function (response) {
             console.log(response[0].dst_ip);
             $('#maximo-numero-alertas-protocolo').append(response[0].proto);
         });
-        $.get('http://192.168.227.128:3000/puertoDestinoMasAlertas', function (response) {
+        $.get(`http://${serverIP}/puertoDestinoMasAlertas`, function (response) {
             console.log(response[0].dst_port);
             $('#maximo-numero-alertas-puerto').append(response[0].dst_port);
         });
-        fetch('http://192.168.227.128:3000/alertasProtocolo')
+        fetch(`http://${serverIP}/alertasProtocolo`)
             .then(response => response.json())
             .then(data => {
     
@@ -164,7 +165,7 @@
                 console.error('Error en la solicitud:', error);
             });
 
-        fetch('http://192.168.227.128:3000/alertasIpFuente')
+        fetch(`http://${serverIP}/alertasIpFuente`)
             .then(response => response.json())
             .then(data => {
   
@@ -217,7 +218,7 @@
                 console.error('Error en la solicitud:', error);
             });
 
-        fetch('http://192.168.227.128:3000/alertasIpDestino')
+        fetch(`http://${serverIP}/alertasIpDestino`)
             .then(response => response.json())
             .then(data => {
           
@@ -270,7 +271,7 @@
                 console.error('Error en la solicitud:', error);
             });
 
-        fetch('http://192.168.227.128:3000/alertasPuertoDestino')
+        fetch(`http://${serverIP}/alertasPuertoDestino`)
             .then(response => response.json())
             .then(data => {
                 
