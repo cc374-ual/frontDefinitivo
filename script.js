@@ -101,7 +101,7 @@ fetch('http://${serverIP}:3000/')
       enipServer: responseENIPSERVER,
     }
 
-    fetch('http://${serverIP}/guardarCambios', {
+    fetch(`http://${serverIP}/guardarCambios`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -165,7 +165,7 @@ function guardarCambiosRegla(){
     textoRegla: texto
   }
 
-  fetch('http://${serverIP}/guardarCambiosRegla', {
+  fetch(`http://${serverIP}/guardarCambiosRegla`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -200,7 +200,7 @@ function guardarCambiosConfigGeneral(){
     homeNet: homeNet
   }
 
-  fetch('http://${serverIP}/guardarCambiosConfigGeneral', {
+  fetch(`http://${serverIP}/guardarCambiosConfigGeneral`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
