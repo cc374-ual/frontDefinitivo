@@ -106,7 +106,7 @@
 
         <script>
                  $(document).ready(function(){
-            $.get('http://192.168.227.128:3000/estado-contenedores', function(estados){
+            $.get('http://192.168.227.128:3000/estadoContenedores', function(estados){
                 $.each(estados, function(nombre,estado){
                     let indicadorClase = estado.estado.toLowerCase() === 'up' ? 'Activo' : 'Inactivo';
                     let accionBoton = indicadorClase === 'Activo' ? 'Apagar' : 'Encender';
@@ -133,7 +133,7 @@
             indicador: indicadorClase}
 
         
-        fetch('http://192.168.227.128:3000/actualizar-estado', {
+        fetch('http://192.168.227.128:3000/actualizarEstado', {
          method: 'POST',
          headers: {
             'Content-Type': 'application/json'
