@@ -101,7 +101,7 @@ fetch('http://192.168.227.128:3000/')
       enipServer: responseENIPSERVER,
     }
 
-    fetch('http://192.168.227.128:3000/guardar-cambios', {
+    fetch('http://192.168.227.128:3000/guardarCambios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -165,7 +165,7 @@ function guardarCambiosRegla(){
     textoRegla: texto
   }
 
-  fetch('http://192.168.227.128:3000/guardar-cambios-regla', {
+  fetch('http://192.168.227.128:3000/guardarCambiosRegla', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -200,7 +200,7 @@ function guardarCambiosConfigGeneral(){
     homeNet: homeNet
   }
 
-  fetch('http://192.168.227.128:3000/guardar-cambiosConfigGeneral', {
+  fetch('http://192.168.227.128:3000/guardarCambiosConfigGeneral', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
